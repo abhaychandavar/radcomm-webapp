@@ -93,11 +93,11 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
                   email: undefined
                 }));
               }}
-              error={
-                {
-                  message: authErrors.email,
-                }
-              }
+              // error={
+              //   {
+              //     message: authErrors.email,
+              //   }
+              // }
             />
           </div>
           <div className={`gap-1 ${loginMethod === 'emailPass' ? 'grid' : 'hidden'}`}>
@@ -123,11 +123,11 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
                   password: undefined
                 }));
               }}
-              error={
-                {
-                  message: authErrors.password,
-                }
-              }
+              // error={
+              //   {
+              //     message: authErrors.password,
+              //   }
+              // }
             />
           </div>
           <Button disabled={isLoading} size={'lg'} className={`p-6 ${loginMethod === 'emailPass' ? 'visible' : 'hidden'} transition-all`} onClick={() => {
