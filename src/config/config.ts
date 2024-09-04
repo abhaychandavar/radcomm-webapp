@@ -14,7 +14,7 @@ const config = {
         vapidkey: 'BEsfD5AZNdJdr4_GW66tBGeRjHSjTNJfFsnkjxvSmE2Fs-FVG3aiELOdwi3nsaQrxhowgQz-U2n2VTyFGXUrugw'
     },
     hero: {
-        videoUrl: "https://vmpn09wz4fdok1nr.public.blob.vercel-storage.com/earthTech-wH4vyqrkooHe1Z8eb2kRhdAuaenpXX.mp4"
+        videoUrl: "https://vmpn09wz4fdok1nr.public.blob.vercel-storage.com/earthTech-Q7oT0GmqwaQBOd6gnVc8V0xt0ElTCd.mp4"
     }
 }
 

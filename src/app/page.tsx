@@ -1,7 +1,6 @@
 import { Button } from "@/components/ui/button";
 import config from "@/config/config";
 import { Mail, Video } from "lucide-react";
-import Image from "next/image";
 
 export default function Home() {
   return (
@@ -24,9 +23,14 @@ export default function Home() {
           </div>
           <Button className="w-fit"><Mail className="w-4 h-4 mr-2" />Join waitlist</Button>
         </div>
-        <video width="w-1" controls={false} preload="true" autoPlay={true} muted loop className="md:w-1/2">
+        <video width="w-1"
+          height="h-1" className="md:w-1/2"
+          loop={true} muted={true}
+          controls={false}
+          poster="https://vmpn09wz4fdok1nr.public.blob.vercel-storage.com/earthTechPoster-acTGACnQl7YAGCldEYRbYLsAIsBU3t.png"
+          preload="auto"
+        >
           <source src={config.hero.videoUrl} type="video/mp4" />
-          Your browser does not support the video tag.
         </video>
       </div>
     </main>
