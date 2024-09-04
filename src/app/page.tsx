@@ -27,6 +27,7 @@ export default function Home() {
           controls={false}
           poster="https://vmpn09wz4fdok1nr.public.blob.vercel-storage.com/earthTechPoster-acTGACnQl7YAGCldEYRbYLsAIsBU3t.png"
           preload="auto"
+          playsInline={true}
         >
           <source src={config.hero.videoUrl} type="video/mp4" />
         </video>
