@@ -15,7 +15,8 @@ const config = {
     },
     hero: {
         videoUrl: "https://vmpn09wz4fdok1nr.public.blob.vercel-storage.com/earthTech-Q7oT0GmqwaQBOd6gnVc8V0xt0ElTCd.mp4"
-    }
+    },
+    isPlatformEnabled: process.env.IS_PLATFORM_ENABLED !== 'false'
 }
 
 export default config;
