@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import config from "@/config/config";
 import { Mail, Video } from "lucide-react";
 import Image from "next/image";
 
@@ -24,7 +25,7 @@ export default function Home() {
           <Button className="w-fit"><Mail className="w-4 h-4 mr-2" />Join waitlist</Button>
         </div>
         <video width="w-1" controls={false} preload="true" autoPlay={true} muted loop className="md:w-1/2">
-          <source src="/earthTech.mp4" type="video/mp4" />
+          <source src={config.hero.videoUrl} type="video/mp4" />
           Your browser does not support the video tag.
         </video>
       </div>
