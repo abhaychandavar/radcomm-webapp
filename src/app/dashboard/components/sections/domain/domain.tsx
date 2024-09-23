@@ -7,7 +7,7 @@ const Domain = ({ parameters }: { parameters?: Record<string, any>}) => {
     }
     
     return (
-        <main className="flex flex-col w-full h-full gap-5 p-20">
+        <main className="flex flex-col w-full h-full gap-5">
             <h1 className="text-3xl">Domains</h1>
             <DomainList />
         </main>

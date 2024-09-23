@@ -36,7 +36,7 @@ const formSchema = z.object({
     ).min(1)
 });
 
-const AddDomainModal = () => {
+const AddDomainModal = ({ buttonVariant = 'default' }: { buttonVariant?: "destructive" | "outline" | "secondary" | "ghost" | 'default' | null }) => {
     const router = useRouter();
     const { toast } = useToast();
     const path = usePathname();
@@ -82,7 +82,7 @@ const AddDomainModal = () => {
     return (
         <Dialog>
             <DialogTrigger asChild>
-                <Button variant='default'>Add domain</Button>
+                <Button variant={buttonVariant} className="w-fit">Add domain</Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
@@ -91,8 +91,8 @@ const AddDomainModal = () => {
                         Add your domain here and select a region closest to your audience to start sending emails
                     </DialogDescription>
                 </DialogHeader>
-                <Form {...form}>
-                    <form onSubmit={form.handleSubmit(onSubmit)} className="w-2/3 space-y-6">
+                <Form  {...form}>
+                    <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-6">
                         <div className="grid gap-4 py-4">
                             <FormField
                                 control={form.control}

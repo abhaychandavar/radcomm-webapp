@@ -13,10 +13,16 @@ import CopyToClipboard from "@/components/copyToClipboard";
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import Dropdown from "@/components/dropdown";
 import helpers from "@/app/utils/helpers";
+import { Switch } from "@/components/ui/switch";
+import Select from "@/components/select";
+import { useToast } from "@/components/ui/use-toast";
 
 const DomainDetails = ({ domainId }: { domainId: string }) => {
     const [domainDetails, setDomainDetails] = useState<Record<string, any>>();
     const router = useRouter();
+    const { toast } = useToast();
+    const [isOpenTrackingEnabled, setIsOpenTrackingEnabled] = useState(false);
+    const [isClickTrackingEnabled, setIsClickTrackingEnabled] = useState(false);
 
     const getGroupedRecords = (records: Array<any>) => {
         const recordGroups: Record<string, any> = {};
@@ -143,6 +149,74 @@ const DomainDetails = ({ domainId }: { domainId: string }) => {
         }
     }
 
+    const updateDomainConfig = async ({
+        clickTracking,
+        openTracking,
+        tls
+    }: {
+        clickTracking?: boolean;
+        openTracking?: boolean;
+        tls?: boolean;
+    }) => {
+        let toRevertValues: Record<string, any> = {};
+
+        let toUpdateData: Record<string, any> = {};
+        if (clickTracking) {
+            toRevertValues.isClickTrackingEnabled = !clickTracking;
+            toUpdateData.clickTrackingEnabled = true;
+        }
+        if (openTracking) {
+            toRevertValues.isOpenTrackingEnabled = !openTracking;
+            toUpdateData.openTrackingEnabled = true;
+        }
+        if (tls) {
+            toUpdateData.isTlsRequired = true;
+        }
+        console.log('toRevertValues 1', toRevertValues)
+        try {
+            if (!domainDetails) throw new Error("Domain details not found");
+            await mAxios.put(`/mailer/onboard/apps/:appId/domain-claims/${domainDetails.id}/config-set`, toUpdateData);
+            if (toUpdateData.clickTrackingEnabled) {
+                setIsClickTrackingEnabled(true);
+            }
+            if (toUpdateData.openTrackingEnabled) {
+                setIsOpenTrackingEnabled(true);
+            }
+            toast({
+                title: "Domain configuration updated",
+            });
+            return true;
+        }
+        catch (error) {
+            console.log('toRevertValues', toRevertValues);
+            for (const key in toRevertValues) {
+                if (key === 'isClickTrackingEnabled') {
+                    setIsClickTrackingEnabled(toRevertValues[key]);
+                }
+                if (key === 'isOpenTrackingEnabled') {
+                    setIsOpenTrackingEnabled(toRevertValues[key]);
+                }
+            }
+            toast({
+                title: "Error updating domain configuration",
+            });
+            return false;
+        }
+    }
+
+    useEffect(() => {
+        if (!domainDetails) return;
+        updateDomainConfig({
+            clickTracking: isClickTrackingEnabled,
+        });
+    }, [isClickTrackingEnabled]);
+    useEffect(() => {
+        if (!domainDetails) return;
+        updateDomainConfig({
+            openTracking: isOpenTrackingEnabled,
+        });
+    }, [isOpenTrackingEnabled]);
+
     const fetchDomainDetails = async (domainId: string) => {
         try {
             console.log('Fetching domain details')
@@ -173,7 +247,7 @@ const DomainDetails = ({ domainId }: { domainId: string }) => {
                 </div>
     );
     return (
-        <div className="w-full h-full p-10 flex flex-col gap-10">
+        <div className="w-full h-full flex flex-col">
             <div className="flex gap-5 w-full justify-between">
                 <div className="flex flex-col gap-5">
                     <h1 className={`text-3xl font-bold bg-gradient-to-r ${domainDetails?.status === 'verifying' ? 'animate-pulse' : ''} ${domainDetails?.status === 'verified' ? 'from-green-500 to-sky-500' : domainDetails?.status === 'failed' ? 'from-red-500 to-destructive-background' : 'from-primary to-yellow-400'} bg-clip-text text-transparent transition-all`}>{domainDetails?.domainName}</h1>
@@ -218,10 +292,10 @@ const DomainDetails = ({ domainId }: { domainId: string }) => {
                 </div>
             </div>
             {domainDetails?.status === 'verifying' ? <p className="text-muted-foreground">Hang tight! The verification might take anywhere from a few minutes to a few hours. We're on it for up to 7 hours, so if it passes, we'll drop you an email. If not, double-check those DNS records and give it another go!</p> : ''}
-            <div className="flex flex-col gap-5 w-full">
+            <div className="flex flex-col gap-5 w-full mt-10">
                 <div className="flex flex-col gap-2 w-full">
                     <h1 className="text-lg font-medium">DNS Records</h1>
-                    <p className="text-muted-foreground p-5">{
+                    <p className="text-muted-foreground">{
                         domainDetails?.status === 'failed' ? `Oops! Looks like your DNS records are still on vacation. Double-check that you've added the following records into your DNS provider's DNS settings page, then give 'Retry Verification' another shot!` :
                             domainDetails?.status === 'verified' ? 'Congratulations!, your DNS records are successfully verified' :
                                 domainDetails?.status === 'verifying' ? `Your DNS records are on an adventure! While they’re getting verified, make sure you've added the following records into your DNS provider's DNS settings page.` :
@@ -230,6 +304,35 @@ const DomainDetails = ({ domainId }: { domainId: string }) => {
                 {
                     generateRecordsTable()
                 }
+            </div>
+            <div className="flex flex-col gap-5 w-full mt-10">
+                <div className="flex flex-col gap-2 w-full">
+                    <h1 className="text-lg font-medium">Click tracking</h1>
+                    <p className="text-muted-foreground">RadApp temporarily redirects each link in the email through an intermediate server to track clicks. Visitors will be immediately redirected back to the original link.</p>
+                    <Switch checked={isClickTrackingEnabled} onCheckedChange={setIsClickTrackingEnabled} />
+                </div>
+                <div className="flex flex-col gap-2 w-full">
+                    <span className="flex gap-2 items-center"><h1 className="text-lg font-medium">Open tracking</h1>
+                    <Badge className="w-fit opacity-60 cursor-default" variant={'outline'}>Not recommended</Badge></span>
+                    <p className="text-muted-foreground">RadApp uses a 1x1 GIF to track email opens, counting each download as an open event. This tracking may not be fully accurate, as email providers and SMTP servers handle images differently, with some blocking external image downloads entirely. As a result, tracking may be incomplete or incorrect, and we do not recommend enabling this.</p>
+                    <Switch checked={isOpenTrackingEnabled} onCheckedChange={setIsOpenTrackingEnabled} />
+                </div>
+                <div className="flex flex-col gap-2 w-full">
+                    <h1 className="text-lg font-medium">Transport Layer Security (TLS)</h1>
+                    <Select items={[
+                            {
+                                id: 'optional',
+                                title: 'Optional'
+                            },
+                            {
+                                id: 'required',
+                                title: 'Required'
+                            }
+                        ]}
+                        defaultValue="optional"
+                        title="TLS preference"
+                    />
+                </div>
             </div>
         </div>
     );

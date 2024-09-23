@@ -20,6 +20,7 @@
     "@radix-ui/react-select": "^2.1.1",
     "@radix-ui/react-separator": "^1.1.0",
     "@radix-ui/react-slot": "^1.1.0",
+    "@radix-ui/react-switch": "^1.1.0",
     "@radix-ui/react-toast": "^1.2.1",
     "@radix-ui/react-tooltip": "^1.1.2",
     "@tabler/icons-react": "^3.11.0",
@@ -49,10 +50,12 @@
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "@types/validator": "^13.12.0",
-    "mini-css-extract-plugin": "^2.9.0",
+    "mini-css-extract-plugin": "^2.9.1",
     "moment-timezone": "^0.5.45",
     "postcss": "^8",
-    "tailwindcss": "^3.4.1",
+    "react-icons": "link:@types/@radix-ui/react-icons",
+    "react-table": "link:@types/@tanstack/react-table",
+    "tailwindcss": "^3.4.10",
     "typescript": "^5"
   }
 }

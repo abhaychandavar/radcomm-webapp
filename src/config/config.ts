@@ -3,9 +3,9 @@ const config = {
     url: 'http://localhost:3000',
     firebaseConfig: {
         apiKey: "AIzaSyB-cVs6wnLLHfpVBV5jC9pvESoqZ821rwo",
-        authDomain: "radcomm-88c57.firebaseapp.com",
-        projectId: "radcomm-88c57",
-        storageBucket: "radcomm-88c57.appspot.com",
+        authDomain: "radapp-88c57.firebaseapp.com",
+        projectId: "radapp-88c57",
+        storageBucket: "radapp-88c57.appspot.com",
         messagingSenderId: "574855561258",
         appId: "1:574855561258:web:4c6c3a30ef8bf406c00353",
         measurementId: "G-CMX61HT2GQ"

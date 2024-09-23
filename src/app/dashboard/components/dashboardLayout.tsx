@@ -22,59 +22,59 @@ const DashboardLayout = ({ section }: { section: string }) => {
                 isCollapsed={false}
                 links={[
                   {
+                    title: "API Keys",
+                    icon: Lock,
+                    variant: "ghost",
+                    path: `${originPath}/api-keys`
+                  },
+                  {
                     title: "Domains",
                     icon: Globe2,
                     variant: "default",
                     path: `${originPath}/domains`
                   },
-                  {
-                    title: "Gen pages",
-                    icon: Sparkles,
-                    variant: "default",
-                    path: `${originPath}/gen-pages`
-                  },
+                  // {
+                  //   title: "Gen pages",
+                  //   icon: Sparkles,
+                  //   variant: "default",
+                  //   path: `${originPath}/gen-pages`
+                  // },
                   {
                     title: "Emails",
                     icon: Mail,
                     variant: "ghost",
                     path: `${originPath}/emails`
                   },
-                  {
-                    title: "SMS",
-                    icon: MessageCircleIcon,
-                    variant: "ghost",
-                    path: `${originPath}/sms`
-                  },
-                  {
-                    title: "Push notifications",
-                    icon: Siren,
-                    variant: "ghost",
-                    path: `${originPath}/push`
-                  },
-                  {
-                    title: "Custom messages",
-                    icon: Puzzle,
-                    variant: "ghost",
-                    path: `${originPath}/custom-messages`
-                  },
-                  {
-                    title: "Clubbed Campaigns",
-                    icon: Speaker,
-                    variant: "ghost",
-                    path: `${originPath}/clubbed-campaigns`
-                  },
-                  {
-                    title: "Audience",
-                    icon: Users,
-                    variant: "ghost",
-                    path: `${originPath}/audience`
-                  },
-                  {
-                    title: "API Keys",
-                    icon: Lock,
-                    variant: "ghost",
-                    path: `${originPath}/api-keys`
-                  },
+                  // {
+                  //   title: "SMS",
+                  //   icon: MessageCircleIcon,
+                  //   variant: "ghost",
+                  //   path: `${originPath}/sms`
+                  // },
+                  // {
+                  //   title: "Push notifications",
+                  //   icon: Siren,
+                  //   variant: "ghost",
+                  //   path: `${originPath}/push`
+                  // },
+                  // {
+                  //   title: "Custom messages",
+                  //   icon: Puzzle,
+                  //   variant: "ghost",
+                  //   path: `${originPath}/custom-messages`
+                  // },
+                  // {
+                  //   title: "Clubbed Campaigns",
+                  //   icon: Speaker,
+                  //   variant: "ghost",
+                  //   path: `${originPath}/clubbed-campaigns`
+                  // },
+                  // {
+                  //   title: "Audience",
+                  //   icon: Users,
+                  //   variant: "ghost",
+                  //   path: `${originPath}/audience`
+                  // },
                   {
                     title: "Webhooks",
                     icon: ArrowUpDown,

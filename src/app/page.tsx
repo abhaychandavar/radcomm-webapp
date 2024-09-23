@@ -1,6 +1,5 @@
-import { Button } from "@/components/ui/button";
+import WaitListModal from "@/components/waitListModal";
 import config from "@/config/config";
-import { Mail } from "lucide-react";
 
 export default function Home() {
   return (
@@ -18,7 +17,7 @@ export default function Home() {
               Effortlessly build real-time apps, send emails that reach the inbox, and schedule tasks—all in one platform.
             </p>
           </div>
-          <Button className="w-fit"><Mail className="w-4 h-4 mr-2" />Join waitlist</Button>
+          <WaitListModal />
         </div>
         <video width="w-1"
           height="h-1" className="md:w-1/2 animate-fadeInSlideUp"

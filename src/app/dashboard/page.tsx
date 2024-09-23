@@ -12,10 +12,14 @@ const Dashboard = () => {
             const { data: response } = await mAxios.get(`/apps?page=1`);
             const { data } = response;
             const { data: cachedAppId } = await axios.get('/api/apps');
+            console.log('data', data);
+            if (!data?.length) {
+                return router.replace('/create-app');
+            }
             const appId = (data as Array<Record<string, any>>).find((a) => a.id === cachedAppId.appId) || data[0].id;
             await axios.post('/api/apps', { appId });
             localStorage.setItem('appId', appId);
-            router.replace(`/dashboard/${appId}/domains`);
+            return router.replace(`/dashboard/${appId}/domains`);
         }
         redirect();
     }, []);
