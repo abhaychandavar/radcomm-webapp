@@ -1,6 +1,7 @@
 import axios, { AxiosError, InternalAxiosRequestConfig } from 'axios';
 import appConfig from '../../config/config';
 import config from '../../config/config';
+import moment from 'moment-timezone';
 // Create an instance of axios
 const mAxios = axios.create();
 
@@ -31,11 +32,9 @@ mAxios.interceptors.request.use((config: InternalAxiosRequestConfig) => {
     const appId = typeof window !== 'undefined' ? document.cookie.split('; ').find(row => row.startsWith('appId='))?.split('=')[1] : localStorage?.getItem('appId');
     config.baseURL = appConfig.apiBaseUrl;
     config.withCredentials = true;
-    if (config.url?.includes(':appId')) {
-        if (!appId) {
-            throw new Error('Could not find App ID');
-        }
-        config.url = config.url.replace(':appId', appId);
+    config.headers['timezone'] = moment.tz.guess();
+    if (appId) {
+        config.headers['app-id'] = appId;
     }
     if (token && config.headers && !config.headers['Authorization']) {
         config.headers.set('Authorization', `Bearer ${token}`);

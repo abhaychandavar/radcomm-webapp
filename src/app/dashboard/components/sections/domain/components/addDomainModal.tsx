@@ -55,7 +55,7 @@ const AddDomainModal = ({ buttonVariant = 'default' }: { buttonVariant?: "destru
 
     const onSubmit = async () => {
         try {
-            const { data: response } = await mAxios.post('/mailer/onboard/apps/:appId/domain', {
+            const { data: response } = await mAxios.post('/mailer/onboard/domain', {
                  domain: form.getValues().domain,
                  region: form.getValues().region
              });

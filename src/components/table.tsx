@@ -39,76 +39,90 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import { LoaderIcon } from "lucide-react";
+import { debounce } from 'lodash';
 
 export function DataTable({
   columns,
   data,
-  fetchData,
+  // fetchData,
   searchBar,
   pagination = false,
-  reset = false
+  // reset = false,
+  searchHandler = (value: string) => {},
+  isLoading = false,
+  pageSize = 50,
+  handlePageChange = (page: number) => {},
+  totalDataLength = 0
 }: {
   columns: ColumnDef<any>[];
-  data?: any[];
-  fetchData?: (page: number, perPage: number) => Promise<any[]>;
+  data: any[];
+  // fetchData?: (page: number, perPage: number) => Promise<any[]>;
   searchBar?: { placeholder: string };
   pagination?: boolean;
-  reset?: boolean;
+  // reset?: boolean;
+  searchHandler?: (searchStr: string) => void;
+  isLoading?: boolean;
+  pageSize?: number;
+  handlePageChange?: (page: number) => void,
+  totalDataLength?: number
 }) {
   const [cachedData, setCachedData] = React.useState<Record<number, any[]>>({});
   const [currentData, setCurrentData] = React.useState<any[]>(data || []);
-  const [loading, setLoading] = React.useState<boolean>(true);
   const [pageIndex, setPageIndex] = React.useState(0);
-  const [pageSize, setPageSize] = React.useState(10);
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
+  const [searchStr, setSearchStr] = React.useState("");
 
+  React.useEffect(() => {
+    console.log('pageIndex', pageIndex)
+    onPageChange(pageIndex + 1);
+  }, [pageIndex]);
   // Fetch data when fetchData function is provided, otherwise use provided data
-  React.useEffect(() => {
-    const loadData = async () => {
-      setLoading(true);
-      if (fetchData) {
-        if (cachedData[pageIndex]) {
-          setCurrentData(cachedData[pageIndex]);
-          setLoading(false);
-        } else {
-          try {
-            const fetchedData = await fetchData(pageIndex, pageSize);
-            setCachedData(prev => ({ ...prev, [pageIndex]: fetchedData }));
-            setCurrentData(fetchedData);
-          } catch (error) {
-            console.error("Error fetching data:", error);
-          } finally {
-            setLoading(false);
-          }
-        }
-      } else {
-        setCurrentData(data || []);
-        setLoading(false);
-      }
-    };
+  // React.useEffect(() => {
+  //   const loadData = async () => {
+  //     setLoading(true);
+  //     if (fetchData) {
+  //       if (cachedData[pageIndex]) {
+  //         setCurrentData(cachedData[pageIndex]);
+  //         setLoading(false);
+  //       } else {
+  //         try {
+  //           const fetchedData = await fetchData(pageIndex, pageSize);
+  //           setCachedData(prev => ({ ...prev, [pageIndex]: fetchedData }));
+  //           setCurrentData(fetchedData);
+  //         } catch (error) {
+  //           console.error("Error fetching data:", error);
+  //         } finally {
+  //           setLoading(false);
+  //         }
+  //       }
+  //     } else {
+  //       setCurrentData(data || []);
+  //       setLoading(false);
+  //     }
+  //   };
 
-    loadData();
-  }, [fetchData, pageSize, pageIndex, data]);
+  //   loadData();
+  // }, [fetchData, pageSize, pageIndex, data]);
 
-  React.useEffect(() => {
-    if (reset) {
-      setPageIndex(0);
-      setSorting([]);
-      setColumnFilters([]);
-      setColumnVisibility({});
-      setRowSelection({});
-      if (fetchData) {
-        setCurrentData(data || []);
-        cachedData[pageIndex] = undefined;
-      }
-    }
-  }, [reset]);
+  // React.useEffect(() => {
+  //   if (reset) {
+  //     setPageIndex(0);
+  //     setSorting([]);
+  //     setColumnFilters([]);
+  //     setColumnVisibility({});
+  //     setRowSelection({});
+  //     if (fetchData) {
+  //       setCurrentData(data || []);
+  //       cachedData[pageIndex] = undefined;
+  //     }
+  //   }
+  // }, [reset]);
   
   const table = useReactTable({
-    data: currentData,
+    data,
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -126,24 +140,36 @@ export function DataTable({
     },
   });
 
+  const onSearch = React.useCallback(
+    debounce((searchTerm) => {
+      searchHandler(searchTerm);
+    }, 300), // Debounce for 300 milliseconds
+    [searchHandler]
+  );
+
+  const handleSearch = async (value: string) => {
+    setSearchStr(value);
+    onSearch(value);
+  }
+
+  const onPageChange = async (pageNumber: number) => {
+    handlePageChange(pageNumber);
+  }
+
   return (
     <div className="w-full">
-      {loading ? (
-        <div className="flex items-center justify-center py-10">
-          <LoaderIcon className="w-4 h-4 animate-spin" />
-        </div>
-      ) : (
+      {
         <>
           <div className="flex items-center justify-between">
             {searchBar && (
-              <div className="flex items-center">
+              <div className="flex items-center mb-4">
                 <Input
                   placeholder={searchBar.placeholder}
-                  value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
+                  value={searchStr}
                   onChange={(event) =>
-                    table.getColumn("email")?.setFilterValue(event.target.value)
+                    handleSearch(event.target.value)
                   }
-                  className="max-w-sm"
+                  className="max-w-sm mr-4"
                 />
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
@@ -170,7 +196,11 @@ export function DataTable({
               </div>
             )}
           </div>
-          <div className="rounded-md border">
+          {isLoading ? (
+        <div className="flex items-center justify-center py-10">
+          <LoaderIcon className="w-4 h-4 animate-spin" />
+        </div>
+      ) : <div className="rounded-md border">
             <Table>
               <TableHeader>
                 {table.getHeaderGroups().map((headerGroup) => (
@@ -205,7 +235,7 @@ export function DataTable({
                 )}
               </TableBody>
             </Table>
-          </div>
+          </div>}
           {pagination && (
             <Pagination className="mt-4 flex justify-start">
               <PaginationContent>
@@ -216,11 +246,12 @@ export function DataTable({
                     className={pageIndex > 0 ? "cursor-pointer" : 'cursor-not-allowed'}
                   />
                 </PaginationItem>
-                {Array.from({ length: Math.ceil(currentData.length / pageSize) }, (_, index) => (
-                  <PaginationItem key={index}>
+                {Array.from({ length: Math.ceil(totalDataLength / pageSize) }, (_, index) => (
+                  <PaginationItem key={index} className={"cursor-pointer"}>
                     <PaginationLink
                       onClick={() => setPageIndex(index)}
                       isActive={index === pageIndex}
+                      
                     >
                       {index + 1}
                     </PaginationLink>
@@ -237,7 +268,7 @@ export function DataTable({
             </Pagination>
           )}
         </>
-      )}
+      }
     </div>
   );
 }

@@ -2,10 +2,11 @@
 
 import Nav from "@/components/nav";
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable";
-import { ArrowUpDown, Globe2, HandCoins, Lock, Mail, MessageCircleIcon, Puzzle, Siren, Sparkles, Speaker, Users } from "lucide-react";
+import { ArrowUpDown, CircleCheck, Globe2, HandCoins, Lock, Mail, MessageCircleIcon, Puzzle, Siren, Sparkles, Speaker, Users } from "lucide-react";
 import appConfig from '../../../config/config';
 import Section from "./section";
 import { useParams } from "next/navigation";
+import { AuthProvider } from "@/components/authProvider";
 
 const DashboardLayout = ({ section }: { section: string }) => {
     const params = useParams();
@@ -13,7 +14,7 @@ const DashboardLayout = ({ section }: { section: string }) => {
 
     const originPath = `${appConfig.url}/dashboard/${appId}`;
     return (
-        <div className='w-full flex-1 overflow-y-hidden'>
+        <AuthProvider><div className='w-full flex-1 overflow-y-hidden'>
             <ResizablePanelGroup
                 direction="horizontal"
                 className="rounded-lg min-h-full ">
@@ -28,10 +29,17 @@ const DashboardLayout = ({ section }: { section: string }) => {
                     path: `${originPath}/api-keys`
                   },
                   {
+                    title: "Tasks",
+                    icon: CircleCheck,
+                    variant: "default",
+                    path: `${originPath}/tasks`
+                  },
+                  {
                     title: "Domains",
                     icon: Globe2,
                     variant: "default",
-                    path: `${originPath}/domains`
+                    path: `${originPath}/domains`,
+                    status: 'coming-soon'
                   },
                   // {
                   //   title: "Gen pages",
@@ -43,7 +51,8 @@ const DashboardLayout = ({ section }: { section: string }) => {
                     title: "Emails",
                     icon: Mail,
                     variant: "ghost",
-                    path: `${originPath}/emails`
+                    path: `${originPath}/emails`,
+                    status: 'coming-soon'
                   },
                   // {
                   //   title: "SMS",
@@ -79,7 +88,8 @@ const DashboardLayout = ({ section }: { section: string }) => {
                     title: "Webhooks",
                     icon: ArrowUpDown,
                     variant: "ghost",
-                    path: `${originPath}/webhooks`
+                    path: `${originPath}/webhooks`,
+                    status: 'coming-soon'
                   },
                   {
                     title: "Billing",
@@ -96,6 +106,7 @@ const DashboardLayout = ({ section }: { section: string }) => {
                 </ResizablePanel>
             </ResizablePanelGroup>
         </div>
+        </AuthProvider>
     );
 }
 

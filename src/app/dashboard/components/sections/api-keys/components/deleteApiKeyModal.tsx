@@ -19,7 +19,7 @@ const DeleteApiKeyModal = ({ apiKey, isOpen = false, onClose }: { apiKey: string
             if (confirmationStr !== 'I\'m sure') {
                 throw { messageStr: 'Confirmation string does not match' };
             }
-            await mAxios.delete(`/apps/:appId/api/keys/${apiKey}`);
+            await mAxios.delete(`/apps/api/keys/${apiKey}`);
             toast({
                 title: 'API key deleted',
                 duration: 5000

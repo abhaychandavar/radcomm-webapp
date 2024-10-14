@@ -125,7 +125,7 @@ const DomainList = () => {
         try {
             if (isDomainsFetching) return;
             isDomainsFetching = true;
-            const { data: domains } = await mAxios.get(`/mailer/onboard/apps/:appId/domains?page=${page || 1}&perPage=${perPage || 10}&search=${search || ''}`);
+            const { data: domains } = await mAxios.get(`/mailer/onboard/domains?page=${page || 1}&perPage=${perPage || 10}&search=${search || ''}`);
             if (domains.data.records.length) {
                 setDomains(domains.data.records.map((domain: any) => {
                     return {

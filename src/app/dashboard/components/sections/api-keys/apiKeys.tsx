@@ -69,21 +69,23 @@ const ApiKeys = ({ parameters }: { parameters?: Record<string, any>}) => {
             ),
         },
     ]
-
+    const [apiKeys, setApiKeys] = useState<any[]>([]);
     const [currentPage, setCurrentPage] = useState(-1);
     const getApiKeys = async (page: number, pageSize: number) => {
         try {
-            const { data: apiKeyData } = await mAxios.get('/apps/:appId/api/keys');
+            const { data: apiKeyData } = await mAxios.get('/apps/api/keys');
             console.log('apiKeyData.data.records', apiKeyData.data.records);
             const apiKeys = apiKeyData.data.records.map((apiData: Record<string, any>) => ({ apiKey: apiData.key, keyId: apiData.id, createdAt: apiData.createdAt }));
             if (page > currentPage) {
                 setCurrentPage(page + 1);
                 setCurrDataLength(currDataLength < 0 ? apiKeys.length : currDataLength + apiKeys.length);
             }
+            setApiKeys(apiKeys);
             return apiKeys;
         }
         catch (error) {
             console.error('get api keys error', error);
+            setApiKeys([]);
             return [];
         }
     }
@@ -95,7 +97,7 @@ const ApiKeys = ({ parameters }: { parameters?: Record<string, any>}) => {
     const createApiKey = async () => {
         try {
             setIsApiKeyCreating(true)
-            await mAxios.post('/apps/:appId/api/keys');
+            await mAxios.post('/apps/api/keys');
             setResetDataTable(true);
             setCurrentPage(-1);
             setCurrDataLength(0);
@@ -107,7 +109,9 @@ const ApiKeys = ({ parameters }: { parameters?: Record<string, any>}) => {
             setIsApiKeyCreating(false);
         }
     }
-
+    useEffect(() => {
+        getApiKeys(1, 50);
+    }, [])
     return (
         <main className="w-full h-full flex flex-col gap-5">
             <h1 className="text-3xl">API Keys</h1>
@@ -123,7 +127,9 @@ const ApiKeys = ({ parameters }: { parameters?: Record<string, any>}) => {
                 <p className="text-muted-foreground">API keys let you access RadApp APIs, ensure that API secret is not revealed</p>
                 <Button variant={currDataLength < 0 ? 'outline' : currDataLength > 0 ? 'outline' : 'default'} disabled={currDataLength >= 10 || currDataLength< 0} className="w-fit" onClick={createApiKey}>{isApiKeyCreating ? <LoaderIcon className="w-4 h-4 animate-spin mr-2" /> : <></>}Get new API Key</Button>
             </div>
-            <DataTable columns={columns} reset={resetDataTable} fetchData={getApiKeys}/>
+            <DataTable columns={columns} 
+             
+            data={apiKeys}/>
         </main>
     )
 }

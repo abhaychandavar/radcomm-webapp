@@ -134,7 +134,7 @@ const DomainDetails = ({ domainId }: { domainId: string }) => {
             setIsVerifyButtonLoading(true);
             console.log('Requested domain verification');
             if (!domainDetails || ['verified', 'verifying'].includes(currentStatus)) return;
-            const { data: response } = await mAxios.post(`/mailer/onboard/apps/:appId/domain-claims/${domainDetails.id}/verify`);
+            const { data: response } = await mAxios.post(`/mailer/onboard/domain-claims/${domainDetails.id}/verify`);
             const domainData = response.data;
             setDomainDetails(domainData);
             console.log('domainData', domainData);
@@ -175,7 +175,7 @@ const DomainDetails = ({ domainId }: { domainId: string }) => {
         console.log('toRevertValues 1', toRevertValues)
         try {
             if (!domainDetails) throw new Error("Domain details not found");
-            await mAxios.put(`/mailer/onboard/apps/:appId/domain-claims/${domainDetails.id}/config-set`, toUpdateData);
+            await mAxios.put(`/mailer/onboard/domain-claims/${domainDetails.id}/config-set`, toUpdateData);
             if (toUpdateData.clickTrackingEnabled) {
                 setIsClickTrackingEnabled(true);
             }
@@ -220,7 +220,7 @@ const DomainDetails = ({ domainId }: { domainId: string }) => {
     const fetchDomainDetails = async (domainId: string) => {
         try {
             console.log('Fetching domain details')
-            const { data: domain } = await mAxios.get(`/mailer/onboard/apps/:appId/domains/${domainId}`);
+            const { data: domain } = await mAxios.get(`/mailer/onboard/domains/${domainId}`);
             console.log('domain', domain.data);
             setDomainDetails(domain.data);
         }

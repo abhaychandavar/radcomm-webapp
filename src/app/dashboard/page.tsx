@@ -18,8 +18,11 @@ const Dashboard = () => {
             }
             const appId = (data as Array<Record<string, any>>).find((a) => a.id === cachedAppId.appId) || data[0].id;
             await axios.post('/api/apps', { appId });
+            // const { data: tokensData } = await axios.get('/api/handle-auth');
+            // localStorage.setItem('accessToken', tokensData.accessToken);
+            // localStorage.setItem('refreshToken', tokensData.refreshToken);
             localStorage.setItem('appId', appId);
-            return router.replace(`/dashboard/${appId}/domains`);
+            return router.replace(`/dashboard/${appId}/tasks`);
         }
         redirect();
     }, []);
