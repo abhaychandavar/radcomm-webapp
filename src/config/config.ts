@@ -1,6 +1,6 @@
 const config = {
     apiBaseUrl: process.env.API_BASE_URL || 'http://localhost:9090',
-    url: process.env.WEB_APP_URL || 'http://localhost:3000',
+    url: 'https://radapp.tech',
     firebaseConfig: {
         apiKey: "AIzaSyB-cVs6wnLLHfpVBV5jC9pvESoqZ821rwo",
         authDomain: "radapp-88c57.firebaseapp.com",
