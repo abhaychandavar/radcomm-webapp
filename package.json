@@ -57,8 +57,6 @@
     "mini-css-extract-plugin": "^2.9.1",
     "moment-timezone": "^0.5.45",
     "postcss": "^8",
-    "react-icons": "link:@types/@radix-ui/react-icons",
-    "react-table": "link:@types/@tanstack/react-table",
     "tailwindcss": "^3.4.10",
     "typescript": "^5"
   }

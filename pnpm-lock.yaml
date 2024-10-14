@@ -145,12 +145,6 @@ devDependencies:
   postcss:
     specifier: ^8
     version: 8.4.47
-  react-icons:
-    specifier: link:@types/@radix-ui/react-icons
-    version: link:@types/@radix-ui/react-icons
-  react-table:
-    specifier: link:@types/@tanstack/react-table
-    version: link:@types/@tanstack/react-table
   tailwindcss:
     specifier: ^3.4.10
     version: 3.4.13
