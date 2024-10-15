@@ -1,5 +1,5 @@
 const config = {
-    apiBaseUrl: process.env.API_BASE_URL || 'http://localhost:9090',
+    apiBaseUrl: process.env.API_BASE_URL || 'https://api.radapp.tech',
     url: 'https://radapp.tech',
     firebaseConfig: {
         apiKey: "AIzaSyB-cVs6wnLLHfpVBV5jC9pvESoqZ821rwo",
