@@ -292,7 +292,8 @@ const Tasks = ({ client }: any) => {
                 createdAt: t.createdAt,
                 scheduleEpoch: t.scheduleEpoch,
                 scheduledAtString: t.scheduledAtString,
-                name: t.name || 'NA'
+                name: t.name || 'NA',
+                status: t.status
             }));
             if (page > currentPage) {
                 setCurrentPage(page + 1);
