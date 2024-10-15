@@ -32,10 +32,11 @@ const Tasks = ({ client }: any) => {
     const [resetDataTable, setResetDataTable] = useState(true);
     const [tasksData, setTasksData] = useState<any[]>([]);
     const [isTaskDataLoading, setIsTaskDataLoading] = useState(false);
-    const [taskSortingFields, setTaskSortingFields] = useState<Array<{field: string, sortHistory: Array<-1 | 1>}>>([
+    const [taskSortingFields, setTaskSortingFields] = useState<Array<{field: string, sortHistory: Array<-1 | 1>, order: -1 | 1 | undefined}>>([
         {
             field: 'createdAt',
-            sortHistory: [-1]
+            sortHistory: [-1],
+            order: -1
         }
     ]);
     const [totalTasks, setTotalTasks] = useState(0);
@@ -288,8 +289,9 @@ const Tasks = ({ client }: any) => {
     const getTasks = async (page: number, pageSize: number, searchTerm?: string, taskSortFields?: Array<{ field: string, order?: -1 | 1 }>) => {
         console.log('page', page, 'pageSize', pageSize, 'searchTerm', searchTerm, 'taskSortFields', taskSortFields);
         try {
+            const sortFields = taskSortFields || ((taskSortingFields.map((ele) => ele.order ? ({field: ele.field, order: ele.order}) : undefined).filter((ele) => ele)) || []) as Array<{ field: string, order: -1 | 1 }>;
             if (tasksData.length <= 0) setIsTaskDataLoading(true);
-            const { data: fetchedTasksData } = await mAxios.get(`/tasks?${searchTerm ? `filter=${searchTerm}` : ''}&page=${page || 1}&perPage=${pageSize || 50}&sort=${taskSortFields?.map((field) => field.order ? `${field.field}:${field.order}` : '').filter((ele) => ele ? true : false).join(',')}`);
+            const { data: fetchedTasksData } = await mAxios.get(`/tasks?${searchTerm ? `filter=${searchTerm}` : ''}&page=${page || 1}&perPage=${pageSize || 50}&sort=${sortFields?.map((field) => field.order ? `${field.field}:${field.order}` : '').filter((ele) => ele ? true : false).join(',')}`);
             console.log('apiKeyData.data.records', fetchedTasksData.data);
             const tasks = fetchedTasksData.data.records.map((t: Record<string, any>) => ({
                 id: t.id,
@@ -319,7 +321,7 @@ const Tasks = ({ client }: any) => {
     }
 
     useEffect(() => {
-        getTasks(1, tasksPerPage);
+        getTasks(1, tasksPerPage, undefined);
     }, [])
 
     useEffect(() => {
