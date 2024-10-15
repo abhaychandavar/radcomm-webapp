@@ -61,6 +61,12 @@ const Tasks = ({ client }: any) => {
                 setTasksData(updatedTasks);
                 break;
             }
+            case 'deleted': {
+                const filteredTasks = tasksData.filter((task) => task.id !== id);
+                setTasksData(filteredTasks);
+                setCurrDataLength(filteredTasks.length);
+                break;
+            }
             default: {
                 break;
             }
