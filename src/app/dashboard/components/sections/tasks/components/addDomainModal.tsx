@@ -70,21 +70,21 @@ const ScheduleTask = ({ buttonVariant = 'default', onTaskCreated }: { buttonVari
                 persist: form.getValues().persistData,
                 scheduleTimeEpoch: moment(form.getValues().scheduleAt).unix(),
                 name: form.getValues().name
-             });
-             setIsOpen(false);
-             onTaskCreated && onTaskCreated();
-             toast({
+            });
+            setIsOpen(false);
+            onTaskCreated && onTaskCreated();
+            toast({
                 title: 'Task scheduled',
                 duration: 5000
             });
-         }
-         catch (error) {
-             console.error('Add domain error', error);
-             toast({
-                 title: 'Could not schedule task, please try again',
-                 duration: 5000
-             });
-         }
+        }
+        catch (error) {
+            console.error('Add domain error', error);
+            toast({
+                title: 'Could not schedule task, please try again',
+                duration: 5000
+            });
+        }
     }
 
     return (
@@ -152,8 +152,8 @@ const ScheduleTask = ({ buttonVariant = 'default', onTaskCreated }: { buttonVari
                                 render={({ field }) => (
                                     <FormItem>
                                         <FormLabel>Schedule at <span className="text-muted-foreground">(Radapp will persist task details)</span></FormLabel>
-                                        <br/>
-                                        <FormControl><Input id="scheduleAt" type="datetime-local" {...field}  /></FormControl>
+                                        <br />
+                                        <FormControl><Input id="scheduleAt" type="datetime-local" {...field} /></FormControl>
                                         <FormMessage />
                                     </FormItem>
                                 )}
@@ -163,9 +163,18 @@ const ScheduleTask = ({ buttonVariant = 'default', onTaskCreated }: { buttonVari
                                 name="persistData"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Persist data <span className="text-muted-foreground">(Radapp will persist task details)</span></FormLabel>
-                                        <br/>
-                                        <FormControl><Switch id="persistData" /></FormControl>
+                                        <FormLabel>
+                                            Persist data
+                                            <span className="text-muted-foreground">(Radapp will persist task details)</span>
+                                        </FormLabel>
+                                        <br />
+                                        <FormControl>
+                                            <Switch
+                                                id="persistData"
+                                                checked={field.value}
+                                                onCheckedChange={field.onChange}
+                                            />
+                                        </FormControl>
                                         <FormMessage />
                                     </FormItem>
                                 )}
