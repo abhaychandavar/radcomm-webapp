@@ -14,7 +14,7 @@ export default function Home() {
 
           <div className="w-full">
             <p className="text-base text-muted-foreground mb-2 text-center md:text-left">
-              Effortlessly build real-time apps, send emails that reach the inbox, and schedule tasks—all in one platform.
+              Effortlessly build real-time apps, schedule tasks, receive payments and sync data directly in your DB and more in one platform.
             </p>
           </div>
           <WaitListModal />
